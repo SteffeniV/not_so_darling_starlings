@@ -6,7 +6,13 @@ import axios from "axios"
 import {Form, Button} from "semantic-ui-react"
 import Slider from "react-rangeslider"
 import USAMap from "react-usa-map"
-import {VictoryContainer, VictoryChart, VictoryBar, VictoryAxis} from "victory"
+import {
+  VictoryContainer,
+  VictoryChart,
+  VictoryBar,
+  VictoryAxis,
+  VictoryStack
+} from "victory"
 // const data = [
 //   {quarter: 1, earnings: 13000},
 //   {quarter: 2, earnings: 16500},
@@ -18,7 +24,8 @@ export class Map extends Component {
   constructor() {
     super()
     this.state = {
-      year: 0
+      year: 0,
+      prevData: []
     }
     //this.handleSubmit = this.handleSubmit.bind(this)
   }
@@ -37,6 +44,9 @@ export class Map extends Component {
       FL: {
         fill: "#db6da9"
       },
+      TX: {
+        fill: "#204360"
+      },
       CA: {
         fill: "#aa75d6"
       },
@@ -48,6 +58,9 @@ export class Map extends Component {
       },
       AK: {
         fill: "#8e4f52"
+      },
+      NC: {
+        fill: "#c60505"
       }
     }
   }
@@ -57,20 +70,26 @@ export class Map extends Component {
     })
   }
   handleOnChangeComplete = e => {
+    this.setState({
+      prevData: this.props.starlings
+    })
     this.props.fetchStateCount(this.state.year)
-    // const data = this.createChartData(this.props.starlings)
-    // this.setState({
-    //   data: data
-    // })
   }
 
-  // createChartData = sightingsArr => {
-  //   return sightingsArr.map(sighting => {
-  //     return {sightings: sighting.data, year: this.state.year}
-  //   })
-  // }
-
   render() {
+    const prevYear = this.state.prevData.length
+      ? this.state.prevData
+      : [
+          {data: null},
+          {data: null},
+          {data: null},
+          {data: null},
+          {data: null},
+          {data: null},
+          {data: null},
+          {data: null},
+          {data: null}
+        ]
     const yearOptions = []
     for (let i = 1900; i <= 2016; i++) {
       yearOptions.push({key: i, text: i, value: i})
@@ -78,64 +97,94 @@ export class Map extends Component {
     let {year} = this.state
     const dataForChart = this.props.starlings.length
       ? [
-          {x: "CA", y: this.props.starlings[0].data},
-          {x: "WA", y: this.props.starlings[1].data},
-          {x: "AK", y: this.props.starlings[2].data},
-          {x: "WY", y: this.props.starlings[3].data},
-          {x: "IL", y: this.props.starlings[4].data},
-          {x: "FL", y: this.props.starlings[5].data},
-          {x: "NY", y: this.props.starlings[6].data}
+          {x: "NY", y: this.props.starlings[0].data},
+          {x: "IL", y: this.props.starlings[1].data},
+          {x: "FL", y: this.props.starlings[2].data},
+          {x: "TX", y: this.props.starlings[3].data},
+          {x: "CA", y: this.props.starlings[4].data},
+          {x: "WY", y: this.props.starlings[5].data},
+          {x: "WA", y: this.props.starlings[6].data},
+          {x: "AK", y: this.props.starlings[7].data},
+          {x: "NC", y: this.props.starlings[8].data}
         ]
       : null
     return (
-      <div>
+      <div className="body">
         <h1 className="year">NOT SO DARLING STARLINGS</h1>
         <div className="mapContainer">
           <USAMap
             onClick={this.mapHandler}
             className="map"
             customize={this.statesCustomConfig()}
+            width={500}
           />
           {this.props.starlings.length ? (
             <div className="chart">
-              <VictoryChart domainPadding={20}>
-                <VictoryBar
-                  style={{
-                    data: {
-                      fill: d => {
-                        if (d.x === "NY") {
-                          return "#5a98ce"
-                        } else if (d.x === "IL") {
-                          return "#73a84d"
-                        } else if (d.x === "FL") {
-                          return "#db6da9"
-                        } else if (d.x === "CA") {
-                          return "#aa75d6"
-                        } else if (d.x === "WY") {
-                          return "#efe77c"
-                        } else if (d.x === "WA") {
-                          return "#db8936"
-                        } else {
-                          return "#8e4f52"
+              <img src="animal-1295607.svg" />
+              <VictoryChart
+                domainPadding={20}
+                animate={{duration: 500, easing: "bounce"}}
+              >
+                <VictoryStack>
+                  <VictoryBar
+                    style={{
+                      data: {
+                        // eslint-disable-next-line complexity
+                        fill: d => {
+                          switch (d.x) {
+                            case "NY":
+                              return "#5a98ce"
+                            case "IL":
+                              return "#73a84d"
+                            case "FL":
+                              return "#db6da9"
+                            case "TX":
+                              return "#204360"
+                            case "CA":
+                              return "#aa75d6"
+                            case "WY":
+                              return "#efe77c"
+                            case "WA":
+                              return "#db8936"
+                            case "AK":
+                              return "#8e4f52"
+                            default:
+                              return "#c60505"
+                          }
                         }
+                        // eslint-disable-next-line complexity
+                        // opacity: d => {
+                        //   if(d.y < 100) {
+                        //     return
+                        //   }
+                        // }
                       }
-                    }
-                  }}
-                  data={dataForChart}
-                />
+                    }}
+                    // domain={{y: [0, 60000]}}
+                    data={dataForChart}
+                  />
+                </VictoryStack>
               </VictoryChart>
-              <h2 className="year">{this.state.year}</h2>
+              <h1 className="year">{this.state.year}</h1>
             </div>
-          ) : null}
+          ) : (
+            <div className="chart">
+              <img src="animal-1295607.svg" />
+              <h4>Slide to see how many starlings were spotted each year!</h4>
+            </div>
+          )}
         </div>
-        <Slider
-          value={year}
-          orientation="horizontal"
-          onChange={this.handleOnChange}
-          min={1950}
-          max={2015}
-          onChangeComplete={this.handleOnChangeComplete}
-        />
+        <div>
+          <h3>Slide to choose a year</h3>
+          <Slider
+            value={year}
+            orientation="horizontal"
+            onChange={this.handleOnChange}
+            min={1950}
+            max={2015}
+            onChangeComplete={this.handleOnChangeComplete}
+          />
+        </div>
       </div>
     )
   }

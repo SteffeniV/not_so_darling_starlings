@@ -1,7 +1,7 @@
-import axios from 'axios'
+import axios from "axios"
 
 //ACTION TYPES
-export const SET_STARLING_DATA = 'SET_STARLING_DATA'
+export const SET_STARLING_DATA = "SET_STARLING_DATA"
 
 //ACTION CREATORS
 export const gotData = dataArr => ({
@@ -31,6 +31,7 @@ export const fetchStateCounts = year => async dispatch => {
     const WYCount = await axios.get(`/api/data/Wyoming/${year}`)
     const WACount = await axios.get(`/api/data/Washington/${year}`)
     const AKCount = await axios.get(`/api/data/Alaska/${year}`)
+    const NCCount = await axios.get(`/api/data/North Carolina/${year}`)
     const countArr = [
       NYCount,
       ILCount,
@@ -39,7 +40,8 @@ export const fetchStateCounts = year => async dispatch => {
       CACount,
       WYCount,
       WACount,
-      AKCount
+      AKCount,
+      NCCount
     ]
     dispatch(gotData(countArr))
   } catch (err) {

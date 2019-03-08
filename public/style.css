@@ -27,10 +27,8 @@ form div {
 .mapContainer {
   display: flex;
   flex-direction: row;
-}
-
-.map {
-  height: 100px;
+  justify-items: center;
+  padding-left: 25%;
 }
 
 .chart {
@@ -40,4 +38,15 @@ form div {
 
 .year {
   text-align: center;
+}
+
+.body {
+  margin-top: 10px;
+  max-height: 90%;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+img {
+  max-height: 200px;
 }
