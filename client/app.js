@@ -1,14 +1,14 @@
-import React from 'react'
+import React from "react"
 
-import {Navbar} from './components'
-import Map from './components/map'
+import {Navbar} from "./components"
+import Map from "./components/map"
 
-import Routes from './routes'
+import Routes from "./routes"
 
 const App = () => {
   return (
     <div>
-      <Navbar />
+      {/* <Navbar /> */}
       <Map />
       <Routes />
     </div>
