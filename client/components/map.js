@@ -97,15 +97,15 @@ export class Map extends Component {
     let {year} = this.state
     const dataForChart = this.props.starlings.length
       ? [
-          {x: "NY", y: this.props.starlings[0].data},
-          {x: "IL", y: this.props.starlings[1].data},
-          {x: "FL", y: this.props.starlings[2].data},
-          {x: "TX", y: this.props.starlings[3].data},
-          {x: "CA", y: this.props.starlings[4].data},
-          {x: "WY", y: this.props.starlings[5].data},
-          {x: "WA", y: this.props.starlings[6].data},
-          {x: "AK", y: this.props.starlings[7].data},
-          {x: "NC", y: this.props.starlings[8].data}
+          {x: "NY", y: this.props.starlings[0]},
+          {x: "IL", y: this.props.starlings[1]},
+          {x: "FL", y: this.props.starlings[2]},
+          {x: "TX", y: this.props.starlings[3]},
+          {x: "CA", y: this.props.starlings[4]},
+          {x: "WY", y: this.props.starlings[5]},
+          {x: "WA", y: this.props.starlings[6]},
+          {x: "AK", y: this.props.starlings[7]},
+          {x: "NC", y: this.props.starlings[8]}
         ]
       : null
     return (
@@ -117,6 +117,7 @@ export class Map extends Component {
             className="map"
             customize={this.statesCustomConfig()}
             width={500}
+            height={500}
           />
           {this.props.starlings.length ? (
             <div className="chart">
@@ -191,7 +192,7 @@ export class Map extends Component {
 }
 const mapStateToProps = state => {
   return {
-    starlings: state.stateCounts
+    starlings: state.stateCounts.all
   }
 }
 const mapDispatchToProps = dispatch => {

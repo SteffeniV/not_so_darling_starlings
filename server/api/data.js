@@ -1,8 +1,8 @@
-const router = require('express').Router()
+const router = require("express").Router()
 module.exports = router
-const {Starling} = require('../db/models')
+const {Starling} = require("../db/models")
 
-router.get('/:state/:year', async (req, res, next) => {
+router.get("/:state/:year", async (req, res, next) => {
   try {
     const sightingsByYear = await Starling.count({
       // attributes: ['calculatedstate'],
