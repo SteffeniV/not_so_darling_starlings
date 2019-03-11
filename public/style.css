@@ -28,7 +28,7 @@ form div {
   display: flex;
   flex-direction: row;
   justify-items: center;
-  padding-left: 25%;
+  padding-left: 10%;
 }
 
 .chart {
@@ -49,4 +49,10 @@ form div {
 
 img {
   max-height: 200px;
+}
+
+.chartContainers,
+.tempContainer {
+  display: flex;
+  flex-direction: row;
 }

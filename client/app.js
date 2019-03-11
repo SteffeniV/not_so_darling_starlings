@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React from "react"
 import {Tab} from "semantic-ui-react"
 import {Navbar} from "./components"
@@ -8,7 +9,7 @@ import ByState from "./components/byState"
 import Routes from "./routes"
 const panes = [
   {
-    menuItem: "Summary",
+    menuItem: "Colorized",
     render: () => (
       <Tab.Pane>
         <Map />

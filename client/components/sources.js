@@ -1,4 +1,5 @@
 import React from "react"
+import {Link} from "react-router-dom"
 
 const cites = [
   "USGS NWHC - Laboratory Information Management System - Eastern US - Avian Cholera and Pasteurella multocida(Accessed through Biodiversity Information Serving Our Nation (BISON), https://bison.usgs.gov, 2019-03-06",
@@ -29,6 +30,11 @@ export const Sources = () => {
   return (
     <div>
       <h1>Data provided by:</h1>
+      <h2>
+        <a href="https://bison.usgs.gov/#home">
+          Biodiversity Information Serving Our Nation (BISON)
+        </a>
+      </h2>
       <ul>
         {cites.map((cite, idx) => {
           return <li key={idx}>{cite}</li>

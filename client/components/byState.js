@@ -13,132 +13,26 @@ import {
   VictoryAxis,
   VictoryStack
 } from "victory"
+import {stateDict, oppStateDict} from "../stateDict"
 
 export class ByState extends Component {
   constructor() {
     super()
     this.state = {
-      year: 0,
+      byStateYear: 0,
       selectedStates: [],
       stateFill: {}
     }
-    //this.handleSubmit = this.handleSubmit.bind(this)
-  }
-
-  stateDict = {
-    AL: "Alabama",
-    AK: "Alaska",
-    AZ: "Arizona",
-    AR: "Arkansas",
-    CA: "California",
-    CO: "Colorado",
-    CT: "Connecticut",
-    DE: "Delaware",
-    FL: "Florida",
-    GA: "Georgia",
-    HI: "Hawaii",
-    ID: "Idaho",
-    IL: "Illinois",
-    IN: "Indiana",
-    IA: "Iowa",
-    KS: "Kansas",
-    KY: "Kentucky",
-    LA: "Louisiana",
-    ME: "Maine",
-    MD: "Maryland",
-    MA: "Massachusetts",
-    MI: "Michigan",
-    MN: "Minnesota",
-    MS: "Mississippi",
-    MO: "Missouri",
-    MT: "Montana",
-    NE: "Nebraska",
-    NV: "Nevada",
-    NH: "New Hampshire",
-    NJ: "New Jersey",
-    NM: "New Mexico",
-    NY: "New York",
-    NC: "North Carolina",
-    ND: "North Dakota",
-    OH: "Ohio",
-    OK: "Oklahoma",
-    OR: "Oregon",
-    PA: "Pennsylvania",
-    RI: "Rhode Island",
-    SC: "South Carolina",
-    SD: "South Dakota",
-    TN: "Tennessee",
-    TX: "Texas",
-    UT: "Utah",
-    VT: "Vermont",
-    VA: "Virginia",
-    WA: "Washington",
-    WV: "West Virginia",
-    WI: "Wisconsin",
-    WY: "Wyoming"
-  }
-
-  oppStateDict = {
-    Alabama: "AL",
-    Alaska: "AK",
-    Arizona: "AZ",
-    Arkansas: "AR",
-    California: "CA",
-    Colorado: "CO",
-    Connecticut: "CT",
-    Delaware: "DE",
-    Florida: "FL",
-    Georgia: "GA",
-    Hawaii: "HI",
-    Idaho: "ID",
-    Illinois: "IL",
-    Indiana: "IN",
-    Iowa: "IA",
-    Kansas: "KS",
-    Kentucky: "KY",
-    Louisiana: "LA",
-    Maine: "ME",
-    Maryland: "MD",
-    Massachusetts: "MA",
-    Michigan: "MI",
-    Minnesota: "MN",
-    Mississippi: "MS",
-    Missouri: "MO",
-    Montana: "MT",
-    Nebraska: "NE",
-    Nevada: "NV",
-    "New Hampshire": "NH",
-    "New Jersey": "NJ",
-    "New Mexico": "NM",
-    "New York": "NY",
-    "North Carolina": "NC",
-    "North Dakota": "ND",
-    Ohio: "OH",
-    Oklahoma: "OK",
-    Oregon: "OR",
-    Pennsylvania: "PA",
-    "Rhode Island": "RI",
-    "South Carolina": "SC",
-    "South Dakota": "SD",
-    Tennessee: "TN",
-    Texas: "TX",
-    Utah: "UT",
-    Vermont: "VT",
-    Virginia: "VA",
-    Washington: "WA",
-    "West Virginia": "WV",
-    Wisconsin: "WI",
-    Wyoming: "WY"
   }
 
   mapHandler = event => {
     this.setState({
       selectedStates: this.state.selectedStates.concat(
-        this.stateDict[event.target.dataset.name]
+        stateDict[event.target.dataset.name]
       ),
       stateFill: {
         ...this.state.stateFill,
-        [event.target.dataset.name]: {fill: "#4071c4"}
+        [event.target.dataset.name]: {fill: "#000000"}
       }
     })
   }
@@ -149,11 +43,14 @@ export class ByState extends Component {
 
   handleOnChange = value => {
     this.setState({
-      year: value
+      byStateYear: value
     })
   }
   handleOnChangeComplete = e => {
-    this.props.fetchSelectedStates(this.state.year, this.state.selectedStates)
+    this.props.fetchSelectedStates(
+      this.state.byStateYear,
+      this.state.selectedStates
+    )
   }
 
   render() {
@@ -161,13 +58,12 @@ export class ByState extends Component {
     for (let i = 1900; i <= 2016; i++) {
       yearOptions.push({key: i, text: i, value: i})
     }
-    let {year} = this.state
+    let {year} = this.state.byStateYear
 
     const dataForChart = this.props.starlingsByState.length
       ? this.props.starlingsByState.map(starling => {
-          console.log(starling)
           return {
-            x: this.oppStateDict[Object.keys(starling)],
+            x: oppStateDict[Object.keys(starling)],
             y: starling[Object.keys(starling)]
           }
         })
@@ -186,58 +82,22 @@ export class ByState extends Component {
 
           {this.props.starlingsByState.length ? (
             <div className="chart">
-              <Button
+              {/* <Button
                 value="Refresh Page"
                 onClick={() => window.location.reload()}
               >
                 Reset
-              </Button>
+              </Button> */}
               <img src="animal-1295607.svg" />
               <VictoryChart
                 domainPadding={20}
                 animate={{duration: 500, easing: "bounce"}}
               >
                 <VictoryStack>
-                  <VictoryBar
-                    // style={{
-                    //   data: {
-                    //     // eslint-disable-next-line complexity
-                    //     fill: d => {
-                    //       switch (d.x) {
-                    //         case "NY":
-                    //           return "#5a98ce"
-                    //         case "IL":
-                    //           return "#73a84d"
-                    //         case "FL":
-                    //           return "#db6da9"
-                    //         case "TX":
-                    //           return "#204360"
-                    //         case "CA":
-                    //           return "#aa75d6"
-                    //         case "WY":
-                    //           return "#efe77c"
-                    //         case "WA":
-                    //           return "#db8936"
-                    //         case "AK":
-                    //           return "#8e4f52"
-                    //         default:
-                    //           return "#c60505"
-                    //       }
-                    //     }
-                    //     // eslint-disable-next-line complexity
-                    //     // opacity: d => {
-                    //     //   if(d.y < 100) {
-                    //     //     return
-                    //     //   }
-                    //     // }
-                    //   }
-                    // }}
-                    // // domain={{y: [0, 60000]}}
-                    data={dataForChart}
-                  />
+                  <VictoryBar data={dataForChart} />
                 </VictoryStack>
               </VictoryChart>
-              <h1 className="year">{this.state.year}</h1>
+              <h1 className="year">{year}</h1>
             </div>
           ) : (
             <div className="chart">
@@ -249,7 +109,7 @@ export class ByState extends Component {
         <div>
           <h3>Slide to choose a year</h3>
           <Slider
-            value={year}
+            value={this.state.byStateYear}
             orientation="horizontal"
             onChange={this.handleOnChange}
             min={1950}

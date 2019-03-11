@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import ReactDOM from "react-dom"
 import {connect} from "react-redux"
 import React, {Component} from "react"
@@ -11,14 +12,9 @@ import {
   VictoryChart,
   VictoryBar,
   VictoryAxis,
-  VictoryStack
+  VictoryStack,
+  VictoryPie
 } from "victory"
-// const data = [
-//   {quarter: 1, earnings: 13000},
-//   {quarter: 2, earnings: 16500},
-//   {quarter: 3, earnings: 14250},
-//   {quarter: 4, earnings: 19000}
-// ]
 
 export class Map extends Component {
   constructor() {
@@ -27,7 +23,6 @@ export class Map extends Component {
       year: 0,
       prevData: []
     }
-    //this.handleSubmit = this.handleSubmit.bind(this)
   }
   mapHandler = event => {
     console.log(event.target.dataset.name)
@@ -70,26 +65,10 @@ export class Map extends Component {
     })
   }
   handleOnChangeComplete = e => {
-    this.setState({
-      prevData: this.props.starlings
-    })
     this.props.fetchStateCount(this.state.year)
   }
 
   render() {
-    const prevYear = this.state.prevData.length
-      ? this.state.prevData
-      : [
-          {data: null},
-          {data: null},
-          {data: null},
-          {data: null},
-          {data: null},
-          {data: null},
-          {data: null},
-          {data: null},
-          {data: null}
-        ]
     const yearOptions = []
     for (let i = 1900; i <= 2016; i++) {
       yearOptions.push({key: i, text: i, value: i})
@@ -107,7 +86,7 @@ export class Map extends Component {
           {x: "AK", y: this.props.starlings[7]},
           {x: "NC", y: this.props.starlings[8]}
         ]
-      : null
+      : []
     return (
       <div className="body">
         <h1 className="year">NOT SO DARLING STARLINGS</h1>
@@ -119,54 +98,88 @@ export class Map extends Component {
             width={500}
             height={500}
           />
+
           {this.props.starlings.length ? (
-            <div className="chart">
-              <img src="animal-1295607.svg" />
-              <VictoryChart
-                domainPadding={20}
-                animate={{duration: 500, easing: "bounce"}}
-              >
-                <VictoryStack>
-                  <VictoryBar
-                    style={{
-                      data: {
-                        // eslint-disable-next-line complexity
-                        fill: d => {
-                          switch (d.x) {
-                            case "NY":
-                              return "#5a98ce"
-                            case "IL":
-                              return "#73a84d"
-                            case "FL":
-                              return "#db6da9"
-                            case "TX":
-                              return "#204360"
-                            case "CA":
-                              return "#aa75d6"
-                            case "WY":
-                              return "#efe77c"
-                            case "WA":
-                              return "#db8936"
-                            case "AK":
-                              return "#8e4f52"
-                            default:
-                              return "#c60505"
+            <div className="chartContainers">
+              <div className="chart">
+                <VictoryChart
+                  domainPadding={20}
+                  animate={{duration: 500, easing: "bounce"}}
+                >
+                  <VictoryStack>
+                    <VictoryBar
+                      style={{
+                        data: {
+                          fill: d => {
+                            switch (d.x) {
+                              case "NY":
+                                return "#5a98ce"
+                              case "IL":
+                                return "#73a84d"
+                              case "FL":
+                                return "#db6da9"
+                              case "TX":
+                                return "#204360"
+                              case "CA":
+                                return "#aa75d6"
+                              case "WY":
+                                return "#efe77c"
+                              case "WA":
+                                return "#db8936"
+                              case "AK":
+                                return "#8e4f52"
+                              default:
+                                return "#c60505"
+                            }
                           }
                         }
-                        // eslint-disable-next-line complexity
-                        // opacity: d => {
-                        //   if(d.y < 100) {
-                        //     return
-                        //   }
-                        // }
+                      }}
+                      data={dataForChart}
+                    />
+                  </VictoryStack>
+                </VictoryChart>
+                <h1 className="year">{this.state.year}</h1>
+              </div>
+              <div>
+                <VictoryPie
+                  data={dataForChart}
+                  width={300}
+                  height={300}
+                  style={{
+                    data: {
+                      fill: d => {
+                        switch (d.x) {
+                          case "NY":
+                            return "#5a98ce"
+                          case "IL":
+                            return "#73a84d"
+                          case "FL":
+                            return "#db6da9"
+                          case "TX":
+                            return "#204360"
+                          case "CA":
+                            return "#aa75d6"
+                          case "WY":
+                            return "#efe77c"
+                          case "WA":
+                            return "#db8936"
+                          case "AK":
+                            return "#8e4f52"
+                          default:
+                            return "#c60505"
+                        }
                       }
-                    }}
-                    // domain={{y: [0, 60000]}}
-                    data={dataForChart}
-                  />
-                </VictoryStack>
-              </VictoryChart>
-              <h1 className="year">{this.state.year}</h1>
+                    },
+                    labels: {
+                      fill: "white"
+                    }
+                  }}
+                  animate={{
+                    duration: 2000,
+                    easing: "bounce"
+                  }}
+                />
+              </div>
             </div>
           ) : (
             <div className="chart">
@@ -175,6 +188,7 @@ export class Map extends Component {
             </div>
           )}
         </div>
+
         <div>
           <h3>Slide to choose a year</h3>
           <Slider
